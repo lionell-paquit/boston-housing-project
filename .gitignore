@@ -1,0 +1,22 @@
+############################
+#
+#
+#
+############################
+
+### VS Code
+.vscode
+*.DS_Store
+
+### Python template
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Environment
+.env
+.venv/
