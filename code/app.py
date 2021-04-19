@@ -3,16 +3,20 @@ import pandas as pd
 import shap
 import matplotlib.pyplot as plt
 
+from PIL import Image
+
 from make_dataset import DataPipeline
 from predict_model import Predict
 
 class App:
     def __init__(self):
+        
         # Loads the Boston House Price Dataset
         boston = DataPipeline()
         
         self.X = boston.data.loc[:,boston.feature_names]
         self.y = boston.data['CMEDV']
+        self.predict = Predict()
 
     def user_input_features(self):
         LSTAT = st.sidebar.slider('LSTAT', self.X.LSTAT.min(), self.X.LSTAT.max(), float(self.X.LSTAT.mean()))
@@ -38,7 +42,10 @@ class App:
         return features
 
     def run(self):
-        st.write("""
+        image = Image.open('../www/images/house-logo.jpg')
+        st.image(image, width=300)
+
+        st.write("""        
         # Boston House Price Prediction App
         This app predicts the **Boston House Price**
         
@@ -61,7 +68,8 @@ class App:
 
         # Sidebar
         # Header of Specify Input Parameters
-        st.sidebar.header('Specify Input Parameters')
+        st.sidebar.header('Input Parameters')
+        st.sidebar.write('Use slider to change parameter values.')
 
         df = self.user_input_features()
 
@@ -74,9 +82,9 @@ class App:
 
         # Load model to predict new data
         # Build Regression Model
-        predict = Predict()
+        #predict = Predict()
         # Apply Model to Make Prediction
-        prediction = predict.get_prediction(df)
+        prediction = self.predict.get_prediction(df)
 
         st.header('Prediction of MEDV')
         st.write(prediction)
@@ -84,13 +92,14 @@ class App:
 
         # Explaining the model's predictions using SHAP values
         # https://github.com/slundberg/shap
-        explainer = shap.TreeExplainer(predict.model.best_estimator_)
+        explainer = shap.TreeExplainer(self.predict.model.best_estimator_)
         shap_values = explainer.shap_values(self.X)
         
         # To disable warning with st.pylot no argument
         st.set_option('deprecation.showPyplotGlobalUse', False)
 
         st.header('Feature Importance')
+        st.write('These diagrams show how each feature influenced our trained model.')
         plt.title('Feature importance based on SHAP values')
         shap.summary_plot(shap_values, self.X)
         st.pyplot(bbox_inches='tight')

@@ -23,6 +23,7 @@ class ModelEvaluation:
         print('RMSE is {}'.format(rmse))
         print('R2 score is {}'.format(r2))
         print("\n")
+        return (rmse, r2)
         
     def display_scores(self, scores):
         print("RMSE Scores: {0}\nMean: {1:.3f}\nStd: {2:.3f}".format(np.sqrt(scores), np.mean(scores), np.std(scores)))
@@ -104,9 +105,9 @@ class ModelTraining:
                 print("Parameters: {0}".format(results['params'][candidate]))
                 print("---")
                 
-    def save_model(self, model):
-        print('INFO: Saving model to ../model/model.pkl')
-        pickle.dump( model, open('../model/model.pkl', 'wb') )
+    def save_model(self, model, model_filepath = '../model/model.pkl'):
+        print('INFO: Saving model to {}...'.format(model_filepath))
+        pickle.dump( model, open(model_filepath, 'wb') )
         
     def run(self):
         # Do hyperparameter searching if tuning is set

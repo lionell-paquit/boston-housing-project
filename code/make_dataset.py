@@ -14,7 +14,18 @@ class DataPipeline:
     def __target(self):
         return self.data['CMEDV'].values
         
+    def clean_data(self):
+        # remove unnecessary columns
+        columns = ['TOWN', 'TOWN#', 'TRACT', 'LON','LAT', 'MEDV']
+        self.data = self.data.drop(labels = columns, axis = 1)
+        
+        # remove CMEDV outliers
+        self.data = self.data[~(self.data.CMEDV >= 50.0)]
+        self.data.reset_index(inplace=True, drop=True)
+        
     def get_data(self):
+        
+        self.clean_data()
         X = self.__features()
         y = self.__target()
         

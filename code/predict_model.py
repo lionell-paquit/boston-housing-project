@@ -1,8 +1,6 @@
 import os
 import pickle
 
-from pathlib import Path
-
 from train_model import ModelTraining
 
 class Predict:
