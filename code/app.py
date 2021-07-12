@@ -99,6 +99,8 @@ class App:
         st.set_option('deprecation.showPyplotGlobalUse', False)
 
         st.header('Feature Importance')
+        shap.plots.waterfall(shap_values[0])
+        
         st.write('These diagrams show how each feature influenced our trained model.')
         plt.title('Feature importance based on SHAP values')
         shap.summary_plot(shap_values, self.X)
